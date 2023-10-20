@@ -1,0 +1,8 @@
+tests/ export-ignore
+var/ export-ignore
+.* export-ignore
+Makefile export-ignore
+phpunit.xml export-ignore
+codecov.yml export-ignore
+phpstan.neon export-ignore
+phpstan-baseline.neon export-ignore

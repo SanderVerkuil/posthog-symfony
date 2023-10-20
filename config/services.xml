@@ -1,0 +1,31 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <defaults public="false" />
+
+        <service id="PostHog\Client" alias="post_hog.client" />
+
+        <service id="PostHog\PostHogBundle\EventListener\RequestListener" class="PostHog\PostHogBundle\EventListener\RequestListener">
+            <argument type="service" id="PostHog\Client" />
+
+            <tag name="kernel.event_listener" event="kernel.request" method="handleKernelRequestEvent" priority="5" />
+            <tag name="kernel.event_listener" event="kernel.controller" method="handleKernelControllerEvent" priority="10" />
+        </service>
+
+        <service id="PostHog\PostHogBundle\EventListener\LoginListener" class="PostHog\PostHogBundle\EventListener\LoginListener">
+            <argument type="service" id="PostHog\Client" />
+            <argument type="service" id="security.token_storage" on-invalid="ignore" />
+
+            <tag name="kernel.event_listener" event="kernel.request" method="handleKernelRequestEvent" />
+            <tag name="kernel.event_listener" event="Symfony\Component\Security\Http\Event\LoginSuccessEvent" method="handleLoginSuccessEvent" />
+        </service>
+
+        <service id="PostHog\PostHogBundle\Command\PostHogTestCommand" class="PostHog\PostHogBundle\Command\PostHogTestCommand">
+            <tag name="console.command" command="post-hog:test" />
+        </service>
+    </services>
+</container>

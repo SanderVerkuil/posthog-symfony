@@ -1,0 +1,12 @@
+includes:
+
+parameters:
+    level: 9
+    paths:
+        - src
+        - tests
+    dynamicConstantNames:
+        - Symfony\Component\HttpKernel\Kernel::VERSION
+        - Symfony\Component\HttpKernel\Kernel::VERSION_ID
+    featureToggles:
+        disableRuntimeReflectionProvider: true

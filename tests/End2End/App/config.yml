@@ -1,0 +1,17 @@
+post_hog:
+  host: https://app.posthog.com/
+  key: ''
+
+framework:
+  router: { resource: "%kernel.project_dir%/routing.yml" }
+  secret: secret
+  test: ~
+
+services:
+
+monolog:
+  handlers:
+    main:
+      type:  stream
+      path:  "%kernel.logs_dir%/%kernel.environment%.log"
+      level: debug

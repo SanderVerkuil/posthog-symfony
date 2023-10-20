@@ -1,0 +1,4 @@
+app:
+  prefix: /
+  type: 'attributes'
+  resource: 'Controller/*'
