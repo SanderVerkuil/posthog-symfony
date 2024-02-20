@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PostHog\PostHogBundle\EventListener;
 
-use PostHog\PostHog;
+use PostHog\PostHogBundle\Model\IdentifyMessage;
 use PostHog\PostHogBundle\PostHogInterface;
 use Symfony\Component\HttpKernel\Event\KernelEvent;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
@@ -17,15 +17,10 @@ use Symfony\Component\Security\Http\Event\LoginSuccessEvent;
 
 final class LoginListener
 {
-    private PostHogInterface $postHog;
-    private ?TokenStorageInterface $tokenStorage;
-
     public function __construct(
-        PostHogInterface $postHog,
-        ?TokenStorageInterface $tokenStorage
+        private PostHogInterface $postHog,
+        private ?TokenStorageInterface $tokenStorage
     ) {
-        $this->tokenStorage = $tokenStorage;
-        $this->postHog = $postHog;
     }
 
     /**
@@ -70,19 +65,21 @@ final class LoginListener
             return;
         }
 
-        $message = [
-            'distinctId' => $this->getUserIdentifier($token->getUser()),
-        ];
+        $identifier = $this->getUserIdentifier($token->getUser());
+
+        if (null === $identifier) {
+            return;
+        }
+
+        $message = new IdentifyMessage($identifier);
 
         $impersonatorUser = $this->getImpersonatorUser($token);
 
         if (null !== $impersonatorUser) {
-            $message['$set'] = [
-                'impersonator_username' => $impersonatorUser,
-            ];
+            $message->set['impersonator_username'] = $impersonatorUser;
         }
 
-        PostHog::identify($message);
+        $this->postHog->identify($message);
     }
 
     private function isTokenAuthenticated(TokenInterface $token): bool
@@ -94,7 +91,7 @@ final class LoginListener
         return null !== $token->getUser();
     }
 
-    private function getUserIdentifier($user): ?string
+    private function getUserIdentifier(mixed $user): ?string
     {
         if ($user instanceof UserInterface) {
             if (method_exists($user, 'getUserIdentifier')) {
@@ -102,7 +99,7 @@ final class LoginListener
             }
 
             if (method_exists($user, 'getUsername')) {
-                return $user->getUsername();
+                return (string) $user->getUsername();
             }
         }
 
@@ -132,7 +129,7 @@ final class LoginListener
             return $event->isMainRequest();
         }
         if (method_exists($event, 'isMasterRequest')) {
-            return $event->isMasterRequest();
+            return (bool) $event->isMasterRequest();
         }
 
         return true;

@@ -31,7 +31,7 @@ final class PostHogBundle extends Bundle
         return self::$instance;
     }
 
-    public static function initialize(Client $client = null): void
+    public static function initialize(?Client $client = null): void
     {
         self::$instance = new PostHogAdapter($client ?? new Client(
             getenv(\PostHog\PostHog::ENV_API_KEY) ?: '',

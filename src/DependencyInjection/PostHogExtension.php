@@ -26,6 +26,9 @@ class PostHogExtension extends ConfigurableExtension
         return __DIR__ . '/../../config/schema/posthog-1.0.xsd';
     }
 
+    /**
+     * @param array<array-key, mixed>&array{options: array<array-key, mixed>} $mergedConfig
+     */
     protected function loadInternal(array $mergedConfig, ContainerBuilder $container): void
     {
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__ . '/../../config'));
@@ -35,7 +38,7 @@ class PostHogExtension extends ConfigurableExtension
     }
 
     /**
-     * @param array<string, mixed> $config
+     * @param array<string, mixed>&array{options: array<array-key, mixed>} $config
      */
     private function registerConfiguration(ContainerBuilder $container, array $config): void
     {
@@ -46,7 +49,6 @@ class PostHogExtension extends ConfigurableExtension
             ->addMethodCall('setSdkIdentifier', [PostHogBundle::SDK_IDENTIFIER])
             ->addMethodCall('setSdkVersion', [PostHogBundle::SDK_VERSION])
             ->addMethodCall('setApiKey', [$options['key']])
-            ->addMethodCall('setOptions', [new Reference()])
         ;
 
         $container

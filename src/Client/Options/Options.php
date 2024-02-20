@@ -13,8 +13,14 @@ class Options
     private bool $debug = false;
     private int $timeout = 10000;
 
+    /**
+     * @var array<string, mixed>
+     */
     private array $consumerOptions = [];
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getOptions(): array
     {
         $options = $this->consumerOptions;

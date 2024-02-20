@@ -8,7 +8,6 @@ use PostHog\PostHogBundle\Tests\End2End\App\Kernel;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
-use function PostHog\PostHogBundle\init;
 
 class End2EndTest extends WebTestCase
 {

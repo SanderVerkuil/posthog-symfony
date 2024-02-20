@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace PostHog\PostHogBundle\Tests\Command;
 
 use PostHog\Client;
-use PostHog\PostHog;
 use PostHog\PostHogBundle\Command\PostHogTestCommand;
 use PostHog\PostHogBundle\Tests\BaseTestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
+
 use function PostHog\PostHogBundle\init;
 
 class TestPostHogCommandTest extends BaseTestCase
@@ -23,7 +23,7 @@ class TestPostHogCommandTest extends BaseTestCase
             new Client(
                 '',
                 [
-                    'host' => 'https://app.posthog.com'
+                    'host' => 'https://app.posthog.com',
                 ]
             )
         );

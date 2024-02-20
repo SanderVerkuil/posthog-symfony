@@ -9,7 +9,6 @@ use Symfony\Component\HttpKernel\Kernel as SymfonyKernel;
 
 class Kernel extends SymfonyKernel
 {
-
     public function registerBundles(): iterable
     {
         return [
@@ -22,6 +21,7 @@ class Kernel extends SymfonyKernel
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
         $loader->load(__DIR__ . '/config.yml');
+
 
         if (self::VERSION_ID >= 50000) {
             $loader->load(__DIR__ . '/deprecations_for_5.yml');

@@ -21,6 +21,7 @@ class Configuration implements ConfigurationInterface
             ->booleanNode('enabled')->defaultValue(false)->end()
             ->scalarNode('user_prefix')->defaultValue('user')->end()
             ->end();
+
         return $builder;
     }
 }
